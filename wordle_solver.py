@@ -92,5 +92,5 @@ if __name__ == "__main__":
     W = utils.load_word_list("lists/words_wordle.txt")
     S = utils.load_word_list("lists/words_wordle_solutions.txt")
 
-    solve_wordle(W, S, False)
+    solve_wordle(W, S, True)
 

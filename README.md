@@ -6,8 +6,8 @@ It assumes each word in the solution list is equally likely to be the hidden wor
 ## Operation
 
 ```
-pip create -n /path/to/wordle_env
-pip activate /path/to/wordle_env
+python3 -m venv /path/to/wordle_env
+source /path/to/wordle_env/bin/activate
 pip install numpy tqdm
 python wordle_solver.py
 ```

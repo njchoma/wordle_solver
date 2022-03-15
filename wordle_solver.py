@@ -1,3 +1,4 @@
+from optparse import OptionParser
 from tqdm import tqdm
 import numpy as np
 from math import log2
@@ -6,6 +7,7 @@ import utils
 
 # GET ENTROPY
 def print_word_entropy(W, S, num_print):
+    num_print = min(num_print, len(W))
     entropies = []
     # print("WARNING: reducing number guess words")
     # W = W[:12000]
@@ -68,7 +70,7 @@ def eliminate_solutions(S, guess, result):
 
 
 # MAIN SOLVER
-def solve_wordle(W, S, print_no_info=False):
+def solve_wordle(W, S, hard_mode=False, print_no_info=False):
     step = 0
     if print_no_info:
         print_word_entropy(W, S, num_print=30)
@@ -78,6 +80,8 @@ def solve_wordle(W, S, print_no_info=False):
         guess = input("\nEnter guessed word: ")
         result = input("Enter result (0=none, 1=letter found, 2=correct letter): ")
         S = eliminate_solutions(S, guess, result)
+        if hard_mode:
+            W = eliminate_solutions(W, guess, result)
         print("Next best guesses:")
         print_word_entropy(W, S, num_print=30)
         step += 1
@@ -87,10 +91,21 @@ def solve_wordle(W, S, print_no_info=False):
             print("Time's up")
             break
 
+def parse_opts():
+    parser = OptionParser()
+    parser.add_option("--hard_mode",
+                  action="store_true", dest="hard_mode", default=False,
+                  help="Solve for Hard Mode")
+
+    (options, args) = parser.parse_args()
+    return options, args
+    
 
 if __name__ == "__main__":
+    options, args = parse_opts()
+
     W = utils.load_word_list("lists/words_wordle.txt")
     S = utils.load_word_list("lists/words_wordle_solutions.txt")
 
-    solve_wordle(W, S, True)
+    solve_wordle(W, S, hard_mode=options.hard_mode, print_no_info=False)
 
